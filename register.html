@@ -91,7 +91,16 @@
   <!-- 核心逻辑 -->
   <script src="./js/register.js"></script>
   <script>
-
+    axios({
+      url: '/login',
+      method: 'POST',
+      data:{
+        username:'kakaxi123',
+        password:'123456'
+      }
+    }).then(res=>{
+      console.log(res);
+    })
   </script>
 </body>
 
