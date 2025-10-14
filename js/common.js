@@ -9,7 +9,7 @@ const showToast = (msg)=>{
 }
 
 const checkToken = e=>{
-    const {token} = JSON.parse(localStorage.getItem('userMsg'))
+    const {token} = JSON.parse(localStorage.getItem('userMsg') || {})
 
     if(!token){
         showToast("请先登录")
@@ -18,4 +18,22 @@ const checkToken = e=>{
             location.href = './login.html'
         },1500)
     }
+}
+
+const renderUname = e=>{
+    const {username} = JSON.parse(localStorage.getItem('userMsg') || {})
+
+    if(username){
+        document.querySelector('.username').innerHTML = username
+    }
+}
+
+const logout = e =>{
+    localStorage.removeItem('userMsg')
+
+    showToast('退出登录成功！')
+
+    setTimeout(()=>{
+        location.href = './login.html'
+    },1500)
 }
