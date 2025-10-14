@@ -1,6 +1,6 @@
-const loginForm = document.querySelector('login-form')
+const loginForm = document.querySelector('.login-form')
 
-document.querySelector('#btn-login').addEventListener('click',()=>{
+document.querySelector('#btn-login').addEventListener('click', async e =>{
     const data = serialize(loginForm,{hash:true,empty:true})
 
     if(!data.username || !data.password){
@@ -11,7 +11,20 @@ document.querySelector('#btn-login').addEventListener('click',()=>{
         return showToast("用户格式错误")
     }
 
-    if(data.password.length <8 || data.password.length > 30){
+    if(data.password.length <6 || data.password.length > 30){
         return showToast("密码格式错误")
+    }
+
+    try{
+        const res = await axios.post('/login', data);
+        const obj = {}
+        obj.username = res.data.data.username
+        localStorage.setItem('userMsg',JSON.stringify(obj))
+        showToast(res.data.message)
+        setTimeout(()=>{
+            location.href = './index.html'
+        },1500)
+    } catch(err){
+        return showToast(err.response.data.message)
     }
 })
