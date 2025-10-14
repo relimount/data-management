@@ -19,6 +19,7 @@ document.querySelector('#btn-login').addEventListener('click', async e =>{
         const res = await axios.post('/login', data);
         const obj = {}
         obj.username = res.data.data.username
+        obj.token = res.data.data.token
         localStorage.setItem('userMsg',JSON.stringify(obj))
         showToast(res.data.message)
         setTimeout(()=>{

@@ -7,3 +7,15 @@ const showToast = (msg)=>{
     document.querySelector('.toast-body').innerHTML = msg
     toast.show()
 }
+
+const checkToken = e=>{
+    const {token} = JSON.parse(localStorage.getItem('userMsg'))
+
+    if(!token){
+        showToast("请先登录")
+
+        setTimeout(()=>{
+            location.href = './login.html'
+        },1500)
+    }
+}
