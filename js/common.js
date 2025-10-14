@@ -7,5 +7,3 @@ const showToast = (msg)=>{
     document.querySelector('.toast-body').innerHTML = msg
     toast.show()
 }
-
-showToast('成功')
