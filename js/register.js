@@ -13,8 +13,13 @@ document.querySelector('#btn-register').addEventListener('click',async e=>{
         return showToast("请输入正确格式密码")
     }
 
-    const res = await axios.post('/register',data);
-    showToast(res.data.message)
-
-    location.href = './login.html'
+    try{
+        const res = await axios.post('/register',data);
+        const respData = res && res.data ? res.data : null
+        showToast((respData && respData.message) || '注册完成')
+        location.href = './login.html'
+    }catch(err){
+        const msg = err && err.response && err.response.data && err.response.data.message ? err.response.data.message : (err && err.message) || '请求出错'
+        showToast(msg)
+    }
 })

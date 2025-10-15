@@ -1,5 +1,6 @@
 axios.defaults.baseURL = 'https://hmajax.itheima.net'
-
+const data = JSON.parse(localStorage.getItem('userMsg') || '{}')
+const { token } = data
 const showToast = (msg)=>{
     const toastDom = document.querySelector('.my-toast')
     const toast = new bootstrap.Toast(toastDom)
@@ -9,7 +10,7 @@ const showToast = (msg)=>{
 }
 
 const checkToken = e=>{
-    const {token} = JSON.parse(localStorage.getItem('userMsg') || {})
+    const {token} = data
 
     if(!token){
         showToast("请先登录")
@@ -21,7 +22,7 @@ const checkToken = e=>{
 }
 
 const renderUname = e=>{
-    const {username} = JSON.parse(localStorage.getItem('userMsg') || {})
+    const {username} = data
 
     if(username){
         document.querySelector('.username').innerHTML = username
@@ -37,3 +38,12 @@ const logout = e =>{
         location.href = './login.html'
     },1500)
 }
+
+axios.interceptors.request.use(config=> {
+    // Safe read: parse with fallback to empty object to avoid errors when nothing stored
+    if (token) config.headers['Authorization'] = token
+    return config;
+  }, error => {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+  });

@@ -17,15 +17,29 @@ document.querySelector('#btn-login').addEventListener('click', async e =>{
 
     try{
         const res = await axios.post('/login', data);
-        const obj = {}
-        obj.username = res.data.data.username
-        obj.token = res.data.data.token
+
+        // Ensure response shape exists before accessing
+        const respData = res && res.data ? res.data : null
+        const inner = respData && respData.data ? respData.data : null
+
+        if(!inner || !inner.token){
+            // Unexpected response format
+            return showToast((respData && respData.message) || '登录失败，响应格式错误')
+        }
+
+        const obj = {
+            username: inner.username,
+            token: inner.token
+        }
+
         localStorage.setItem('userMsg',JSON.stringify(obj))
-        showToast(res.data.message)
+        showToast(respData.message || '登录成功')
         setTimeout(()=>{
             location.href = './index.html'
         },1500)
     } catch(err){
-        return showToast(err.response.data.message)
+        // Prefer server message, otherwise use generic message
+        const msg = err && err.response && err.response.data && err.response.data.message ? err.response.data.message : (err && err.message) || '请求出错'
+        return showToast(msg)
     }
 })
