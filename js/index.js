@@ -25,23 +25,18 @@ const getData = async()=>{
         })
         console.log(res);
 
-        const respData = res && res.data ? res.data : null
-        const inner = respData && respData.data ? respData.data : null
-
-        if(inner && inner.overview){
-            renderOverview(inner.overview)
-        } else {
-            console.warn('dashboard 接口返回格式异常', res)
-        }
+            // axios 响应拦截器已返回 response.data
+            // 这里假定 res 为后端 data 对象，包含 data.overview
+            if (res && res.data && res.data.overview) {
+                renderOverview(res.data.overview)
+            } else if (res && res.overview) {
+                // 有些接口可能直接把 overview 放在根对象上
+                renderOverview(res.overview)
+            } else {
+                console.warn('dashboard 接口返回格式异常', res)
+            }
     }catch(err){
         console.dir(err)
-        if(err.response.status == 401){
-            showToast('登录过期，请重新登录')
-            localStorage.removeItem('userMsg')
-            setTimeout(()=>{
-                location.href = './login.html'
-            },1500)
-        }
     }
 }
 

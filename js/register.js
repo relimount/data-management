@@ -15,8 +15,8 @@ document.querySelector('#btn-register').addEventListener('click',async e=>{
 
     try{
         const res = await axios.post('/register',data);
-        const respData = res && res.data ? res.data : null
-        showToast((respData && respData.message) || '注册完成')
+        const resp = res || {}
+        showToast(resp.message || '注册完成')
         location.href = './login.html'
     }catch(err){
         const msg = err && err.response && err.response.data && err.response.data.message ? err.response.data.message : (err && err.message) || '请求出错'
